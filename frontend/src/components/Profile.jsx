@@ -20,7 +20,8 @@ function Profile() {
       navigate('/login')
       return
     }
-        const userData = JSON.parse(atob(token.split('.')[1]));
+    const userData = JSON.parse(atob(token.split('.')[1]));
+    console.log(userData)
       setUserId(userData.id)
         axios.get(`http://localhost:8000/api/v1/posts/profile/${userData.id}`,{headers: {
         "Authorization": `Bearer ${token} `,
