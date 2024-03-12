@@ -10,23 +10,30 @@ function HomeComponent() {
   const [data, setData] = useState([]);
   const [del, setDel] = useState(false);
   const [add, setAdd] = useState(false);
+  const [userId, setUserId] = useState('');
   const [image, setImage] = useState(false);
   const navigate = useNavigate();
   const cookies = new Cookies();
   const token=cookies.get('token')
   useEffect( ()=>{
+    
     if (!token) {
       alert("you should Login First ")
       navigate('/login')
       return
     }
     const userData = JSON.parse(atob(token.split('.')[1]));
+    console.log(userData)
+        setUserId(userData.id)
+
     axios.get('http://localhost:8000/api/v1/posts')
       .then(res => {
-        const post = res.data.data.find(d => d.user._id == userData.id);
-        console.log(res.data.data)
-        setImage(post?.user.media)
         setData(res.data.data)
+      })
+    axios.get(`http://localhost:8000/api/v1/auth/${userData.id}`)
+      .then(res => {
+        console.log(res.data.data.media);
+        setImage(res.data.data.media)
       })
     return () => {
       setAdd(false)

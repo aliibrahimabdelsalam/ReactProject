@@ -134,46 +134,76 @@ exports.login = expressHandler(function _callee2(req, res, next) {
     }
   });
 });
-exports.edit = expressHandler(function _callee3(req, res, next) {
-  var uploadRes, user;
+exports.getUser = expressHandler(function _callee3(req, res, next) {
+  var user;
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
           console.log(req.params.id);
           _context3.next = 3;
-          return regeneratorRuntime.awrap(uploadMedia(req.file.path));
+          return regeneratorRuntime.awrap(User.findById(req.params.id));
 
         case 3:
-          uploadRes = _context3.sent;
-          console.log('upload ', uploadRes.secure_url);
-          _context3.next = 7;
-          return regeneratorRuntime.awrap(User.findByIdAndUpdate(req.params.id, {
-            media: uploadRes.secure_url
-          }, {
-            "new": true
-          }));
-
-        case 7:
           user = _context3.sent;
-          console.log(user);
-          res.status(201).json({
-            state: 'success',
+
+          if (user) {
+            _context3.next = 6;
+            break;
+          }
+
+          return _context3.abrupt("return", next(new AppError('User not Found', 400)));
+
+        case 6:
+          res.status(200).json({
+            status: 'success',
             data: user
           });
 
-        case 10:
+        case 7:
         case "end":
           return _context3.stop();
       }
     }
   });
 });
-exports["protected"] = expressHandler(function _callee4(req, res, next) {
-  var token, decoded;
+exports.edit = expressHandler(function _callee4(req, res, next) {
+  var uploadRes, user;
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.next = 2;
+          return regeneratorRuntime.awrap(uploadMedia(req.file.path));
+
+        case 2:
+          uploadRes = _context4.sent;
+          _context4.next = 5;
+          return regeneratorRuntime.awrap(User.findByIdAndUpdate(req.params.id, {
+            media: uploadRes.secure_url
+          }, {
+            "new": true
+          }));
+
+        case 5:
+          user = _context4.sent;
+          res.status(201).json({
+            status: 'success',
+            data: user
+          });
+
+        case 7:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
+});
+exports["protected"] = expressHandler(function _callee5(req, res, next) {
+  var token, decoded;
+  return regeneratorRuntime.async(function _callee5$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
@@ -182,11 +212,11 @@ exports["protected"] = expressHandler(function _callee4(req, res, next) {
           }
 
           if (token) {
-            _context4.next = 3;
+            _context5.next = 3;
             break;
           }
 
-          return _context4.abrupt("return", next(new AppError('You Are Not Logged In! Please Log In To Get Access.', 401)));
+          return _context5.abrupt("return", next(new AppError('You Are Not Logged In! Please Log In To Get Access.', 401)));
 
         case 3:
           decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -195,7 +225,7 @@ exports["protected"] = expressHandler(function _callee4(req, res, next) {
 
         case 6:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   });

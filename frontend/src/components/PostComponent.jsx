@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 const PostComponent = ({ data, setDel }) => {
+  const [userId, setUserId] = useState('');
   const time1 = Date.now();
   const time2 = new Date(data.createdAt).getTime();
   const differ = time1 - time2;
@@ -12,7 +13,6 @@ const PostComponent = ({ data, setDel }) => {
   const hour = Math.floor(differ / (1000 * 60 * 60 ));
   const min = Math.floor(differ / (1000 * 60  ));
   const day = Math.floor(differ / (1000 * 60 * 60 * 24));
-  const [userId, setUserId] = useState('');
   useEffect(() => {
     const cookies = new Cookies();
     const token = cookies.get('token');

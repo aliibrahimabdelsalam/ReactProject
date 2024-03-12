@@ -52,11 +52,19 @@ exports.login = expressHandler(async (req, res, next) => {
   createToken(user, 200, req, res);
 });
 
-exports.edit = expressHandler(async (req, res, next) => {
+exports.getUser = expressHandler(async (req, res, next) => {
   console.log(req.params.id);
-
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new AppError('User not Found', 400));
+  }
+  res.status(200).json({
+    status: 'success',
+    data: user,
+  });
+});
+exports.edit = expressHandler(async (req, res, next) => {
   const uploadRes = await uploadMedia(req.file.path);
-  console.log('upload ', uploadRes.secure_url);
   const user = await User.findByIdAndUpdate(
     req.params.id,
     {
@@ -66,9 +74,8 @@ exports.edit = expressHandler(async (req, res, next) => {
       new: true,
     }
   );
-  console.log(user);
   res.status(201).json({
-    state: 'success',
+    status: 'success',
     data: user,
   });
 });

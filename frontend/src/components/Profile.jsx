@@ -23,13 +23,17 @@ function Profile() {
     const userData = JSON.parse(atob(token.split('.')[1]));
     console.log(userData)
       setUserId(userData.id)
-        axios.get(`http://localhost:8000/api/v1/posts/profile/${userData.id}`,{headers: {
+    axios.get(`http://localhost:8000/api/v1/posts/profile/${userData.id}`, {
+      headers: {
         "Authorization": `Bearer ${token} `,
-        }
-        }).then(res => {
-          setData(res.data.data)
-          setImage(res.data.data[0].user.media)
-        })
+      }
+    }).then(res => {
+      setData(res.data.data)
+    });
+    axios.get(`http://localhost:8000/api/v1/auth/${userData.id}`)
+      .then(res => {
+        setImage(res.data.data.media)
+      })
     }, [image])
   function handleImage(e) { 
     setMedia(e.target.files[0])
@@ -57,6 +61,7 @@ function Profile() {
       <div className="flex justify-center mt-6">
         <div className="bg-white w-1/2 p-4 h-96 rounded-lg shadow-lg">
           <img className="w-full object-contain h-5/6 " src={image} alt="image" />
+          <p> Update Profile Picture</p>
           <input type="file" onChange={handleImage} className="file-input file-input-bordered file-input-primary file-input-sm w-1/2 max-w-xs" />
           <button className="bg-blue ml-16 text-white py-2 px-4 rounded hover:bg-purple focus:outline-none focus:shadow-outline-blue active:bg-blue-800 transition duration-150 ease-in-out"
             onClick={changeProfilePic}>Submit</button>
