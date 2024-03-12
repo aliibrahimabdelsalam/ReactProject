@@ -47,7 +47,7 @@ const AddPost = ({setAdd}) => {
     <div className="space-y-2">
       <label htmlFor="bio" className="text-gray-700 text-sm">Bio</label>
       <div className="relative rounded-md shadow-sm">
-        <textarea
+        <textarea  rows={6}
           id="bio"
           placeholder="Write your bio here..."
           value={description}

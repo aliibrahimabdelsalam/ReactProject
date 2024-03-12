@@ -24,7 +24,8 @@ function HomeComponent() {
     axios.get('http://localhost:8000/api/v1/posts')
       .then(res => {
         const post = res.data.data.find(d => d.user._id == userData.id);
-        setImage(post.user.media)
+        console.log(res.data.data)
+        setImage(post?.user.media)
         setData(res.data.data)
       })
     return () => {

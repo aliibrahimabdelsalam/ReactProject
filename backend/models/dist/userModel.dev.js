@@ -31,7 +31,8 @@ var userSchema = new mongoose.Schema({
     }
   },
   media: {
-    type: String
+    type: String,
+    "default": 'https://res.cloudinary.com/df4jdldmb/image/upload/v1710254408/samples/r3k1s9k9qicbrrg7kfnr.png'
   }
 }, {
   timestamps: true

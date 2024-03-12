@@ -28,7 +28,6 @@ exports.createPost = expressHandler(async (req, res, next) => {
 
 exports.getAllPosts = expressHandler(async (req, res, next) => {
   const posts = await Post.find();
-
   res.status(200).json({
     status: 'success',
     result: posts.length,
