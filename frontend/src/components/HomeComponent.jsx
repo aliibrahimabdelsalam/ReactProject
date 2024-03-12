@@ -21,7 +21,6 @@ function HomeComponent() {
       return
     }
     const userData = JSON.parse(atob(token.split('.')[1]));
-    console.log(userData);
     axios.get('http://localhost:8000/api/v1/posts')
       .then(res => {
         const post = res.data.data.find(d => d.user._id == userData.id);

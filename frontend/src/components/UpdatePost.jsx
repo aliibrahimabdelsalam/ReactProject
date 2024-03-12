@@ -8,6 +8,7 @@ const UpdatePost = () => {
   const { id } = useParams();
   const [description, setDescription] = useState("");
   const [media, setMedia] = useState(null);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
     const cookies = new Cookies();
   const token=cookies.get('token')
@@ -16,7 +17,10 @@ const UpdatePost = () => {
       const {data} = await axios.get(`http://localhost:8000/api/v1/posts/${id}`,{headers: {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token} `,
-      }});
+      }
+      });
+      console.log(data.data)
+      setImage(data.data.user.media)
       setDescription(data.data.description)
       setMedia(data.data.media)
     };
@@ -55,7 +59,7 @@ const UpdatePost = () => {
   }
   return (
     <>
-      <NavBar handleLogout={handleLogout} />
+      <NavBar handleLogout={handleLogout} image={image} />
     <div className="mt-8 p-6 bg-white shadow-md rounded-md w-1/2 mx-auto">
       <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
         <div className="space-y-2">
